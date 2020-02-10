@@ -1,0 +1,513 @@
+---
+output:
+    beamer_presentation:
+        includes:
+            in_header: style/header.tex
+            before_body: style/body.tex
+        fig_caption: false
+        fig_crop: false
+        latex_engine: xelatex
+        highlight: tango
+classoption: "aspectratio=169"
+date: "2020-02-12"
+---
+
+```{r setup, include=FALSE, results="hide"}
+library(data.table)
+library(ggplot2)
+library(lubridate)
+
+set.seed(42)
+
+# enable Lato on Ubuntu
+my_sis <- Sys.info()["sysname"]
+if (my_sis == "Linux") {
+    sysfonts::font_add(
+        "Lato",
+        regular = "/usr/share/fonts/truetype/lato/Lato-Regular.ttf",
+        bold = "/usr/share/fonts/truetype/lato/Lato-Bold.ttf",
+        italic = "/usr/share/fonts/truetype/lato/Lato-Italic.ttf",
+        bolditalic = "/usr/share/fonts/truetype/lato/Lato-BoldItalic.ttf")
+}
+if(my_sis == "Darwin") {
+    sysfonts::font_add(
+        "Lato",
+        regular = "/Users/tom/Library/Fonts/Lato-Regular.ttf",
+        bold = "/Users/tom/Library/Fonts/Lato-Bold.ttf",
+        italic = "/Users/tom/Library/Fonts/Lato-Italic.ttf",
+        bolditalic = "/Users/tom/Library/Fonts/Lato-BoldItalic.ttf")
+}
+
+# knitr options that work with fig_height: 6, fig_width: 8, and fig_crop: false
+# in beamer presentations
+fh <- grid::convertUnit(unit(227, "pt"), "in", valueOnly = TRUE)
+fw <- grid::convertUnit(unit(398, "pt"), "in", valueOnly = TRUE)
+knitr::opts_chunk$set(
+    dev.args=list(bg = "transparent",
+                  family = "Lato",
+                  pointsize = 8),
+    dev="cairo_pdf",
+    echo = FALSE,
+    message = FALSE,
+    warning = FALSE,
+    cache = TRUE,
+    fig.align = 'center',
+    # out.width = "0.8\\textwidth",
+    # out.height  ="0.8\\textheight")
+    fig.height = fh * 0.9,
+    fig.width = fw,
+    out.width = NULL,
+    out.height = NULL)
+
+# colour scheme for plots
+Set1 <- RColorBrewer::brewer.pal(9, "Set1")
+alpha_set <- ggplot2::alpha(Set1, 0.5)
+heatscale <- RColorBrewer::brewer.pal(6, "YlOrRd")
+
+```
+
+# \hfill
+
+\begincols[c]
+\begincol{0.5\textwidth}
+
+![](img/reproducibility-graphic-online1.jpeg){height=50mm}
+\endcol
+\begincol{0.5\textwidth}
+
+![](img/reproducibility-graphic-online6.jpg){height=50mm}
+
+\endcol
+\endcols
+
+\source{Jenny Bryan \href{https://youtu.be/7oyiPBjLAWY}{https://youtu.be/7oyiPBjLAWY} \& Nature News, \href{http://www.nature.com/news/1-500-scientists-lift-the-lid-on-reproducibility-1.19970}{10.1038/533452a}}
+
+# What is reproducibility?
+
+**Reproduce**: under identical conditions to the previous result, repeat the analysis and get the **exact** same result
+
+In bionformatics:
+
+- **same data**
+- **same methodology** (code)
+- **same result**
+
+For reproducible bioinformatics:
+
+1. Don't modify raw data
+2. Record the code
+3. Capture the computing environment
+
+\source{Modified from Adam Labadorf's \href{https://bf528.readthedocs.io/en/latest/_downloads/c6a6675d4570f5ab61c8fe88cb429b8a/reproducibility.pdf}{slides}}
+
+# No peeking at the data
+
+![](img/genome_res.pdf){height=50mm}
+
+\source{Ziemann \emph{et al}., 2016. \href{https://doi.org/10.1186/s13059-016-1044-7}{10.1186/s13059-016-1044-7}}
+
+# Point-and-click software is unlikely to be reproducible
+
+\centering
+
+![](img/blast.png){height=2.8in}
+
+# Running on the fly probably won't be reproducible
+
+\begincols[c]
+\begincol{0.5\textwidth}
+
+**Examples**:
+
+- install software locally
+- use software installed by the admin
+- type your commands directly into the console
+- save a set of scripts to run in order
+
+\endcol
+\begincol{0.5\textwidth}
+
+**Possible issues**:
+
+- will it run again?
+- are **all** the steps documented?
+- is the code you recorded the same as the code you ran?
+- did you correctly record the order of steps?
+
+\endcol
+\endcols
+
+# Workflow managers force you to record the steps
+
+```{r, engine = 'python', eval = FALSE, echo = TRUE, python.reticulate = FALSE}
+rule trim_adaptors:
+    input:
+        'data/raw_reads/{sample}.fq.gz',
+    output:
+        'output/trimmed/{sample}.fq.gz'
+    shell:
+        'trim_adaptors --raw_reads={input} > {output}'
+        
+rule run_assembly:
+    input:
+        'output/trimmed/{sample}.fq.gz'
+    output:
+        'output/assemblies/{sample}.fasta'
+    shell:
+        'assemble_genome --reads={input} > {output}'
+```
+
+# Reproducibility and convenience
+
+\begincols[c]
+\begincol{0.5\textwidth}
+
+![](img/graph.pdf){height=50mm}
+
+\endcol
+\begincol{0.5\textwidth}
+
+- The code *is* the documentation
+- Scale the same code to different data, input
+- Version control → versioned results
+
+\vspace{24pt}
+
+**Lots of good options**:
+
+- **`snakemake`** ← `python3`
+- **` nextflow`** ← `java`
+- **`      CWL`** ← purists
+- **`    drake`** ← `R`
+- **`     make`** ← oldschool
+
+\endcol
+\endcols
+
+# Reproducible computing environment
+
+- `samtools`
+- `cufflinks`
+- `stacks`
+- *software* with *version* and *dependencies* with *versions* and *OS* with *version*
+
+# Reproducible computing environment
+
+- On our department's hardware:
+
+```{r, engine = 'bash', eval = FALSE, echo = TRUE}
+$ samtools --version
+samtools 1.8-17-g831aa89
+Using htslib 1.8-13-g19a66ce
+Copyright (C) 2018 Genome Research Ltd.
+```
+
+- *e.g.* Ubuntu 19.10:
+
+```{r, engine = 'bash', eval = FALSE, echo = TRUE}
+$ apt policy samtools
+samtools:
+  Installed: 1.9-4
+  Candidate: 1.9-4
+  Version table:
+ *** 1.9-4 500
+        500 http://nz.archive.ubuntu.com/ubuntu eoan/universe amd64 Packages
+```
+
+# Software containers
+
+- Isolated, complete environment including description 
+- Essentially a mini OS
+- Contain specific version of software with dependencies
+- **In theory** they run anywhere (portability), but you can't run `Docker` on shared hardware
+
+\centering
+
+![](img/singularity.png){height=1in} ![](img/docker.png){height=1in}
+
+\source{Modified from Adam Labadorf's \href{https://bf528.readthedocs.io/en/latest/_downloads/15_reproducibility.pdf}{slides}}
+
+# Singularity
+
+
+- **Reproducible software stacks**
+- **Mobility of compute**
+- **Compatibility with complicated architectures**
+- Security model: Unlike many other container systems designed to support trusted users running trusted containers we must support the opposite model of **untrusted users running untrusted containers**. This changes the security paradigm considerably and increases the breadth of use cases we can support.
+
+\source{\href{https://www.sylabs.io/guides/2.6/user-guide/introduction.html}{https://www.sylabs.io/guides/2.6/user-guide/introduction.html}}
+
+# Singularity containers
+
+```{r, engine = 'bash', eval = TRUE, echo = TRUE, cache = FALSE, error = TRUE}
+salmon
+```
+
+```{r, engine = 'bash', eval = TRUE, echo = TRUE, cache = FALSE, error = TRUE}
+singularity exec salmon_0.11.1.simg salmon
+```
+
+# Getting software in containers
+
+- `pull` a shared container from Singularity Hub
+
+```{r, engine = 'bash', eval = FALSE, echo = TRUE}
+singularity pull \
+    --name salmon_0.11.1.simg \
+    shub://TomHarrop/singularity-containers:salmon_0.11.1
+```
+
+# Getting software in containers
+
+\centering
+
+![](img/shub.png){height=2.5in}
+
+\source{\href{https://www.singularity-hub.org/collections/996}{https://www.singularity-hub.org/collections/996}}
+
+# Getting software in containers
+
+- `pull` a shared container from Singularity Hub
+
+```{r, engine = 'bash', eval = FALSE, echo = TRUE}
+singularity pull \
+    --name salmon_0.11.1.simg \
+    shub://TomHarrop/singularity-containers:salmon_0.11.1
+```
+
+- start with a Singularity recipe, then run `singularity build`
+
+```{r, engine = 'bash', eval = FALSE, echo = TRUE}
+singularity build salmon_0.11.1.simg Singularity.salmon_0.11.1
+```
+
+# Singularity recipes
+
+```{r, engine = 'bash', eval = FALSE, echo = TRUE}
+Bootstrap: docker
+From: combinelab/salmon:0.11.1
+
+%help
+    Salmon 0.11.1
+    https://github.com/COMBINE-lab/salmon/releases
+
+%labels
+    MAINTAINER "Tom Harrop (twharrop@gmail.com)"
+    VERSION "salmon 0.11.1"
+
+%runscript
+    exec /usr/local/bin/salmon "$@"
+```
+
+
+# Singularity recipes: "bootstrap"
+
+- Where the base OS comes from
+
+```{r, engine = 'bash', eval = FALSE, echo = TRUE}
+Bootstrap: debootstrap
+OSVersion: bionic
+```
+
+- You can pull straight from `Docker`
+
+```{r, engine = 'bash', eval = FALSE, echo = TRUE}
+Bootstrap: docker
+From: ubuntu:18.04
+```
+
+# Singularity recipes: "bootstrap"
+
+- You can pull from other `Docker` repos
+
+```{r, engine = 'bash', eval = FALSE, echo = TRUE}
+Bootstrap: docker
+From: rocker/verse:latest
+```
+
+- Bioconductor releases `Docker` images too
+
+```{r, engine = 'bash', eval = FALSE, echo = TRUE}
+Bootstrap: docker
+From: bioconductor/release_core2:R3.5.0_Bioc3.7
+```
+
+# Singularity recipes: "help" and "labels"
+
+- What does this image do
+
+```{r, engine = 'bash', eval = FALSE, echo = TRUE}
+%help
+    Salmon 0.11.1
+    https://github.com/COMBINE-lab/salmon/releases
+```
+
+- Who wrote the recipe
+
+```{r, engine = 'bash', eval = FALSE, echo = TRUE}
+%labels
+    MAINTAINER "Tom Harrop (twharrop@gmail.com)"
+    VERSION "salmon 0.11.1"
+```
+
+# Singularity recipes: "runscript"
+
+- What happens when someone does `singularity run` on this container
+
+```{r, engine = 'bash', eval = FALSE, echo = TRUE}
+%runscript
+    exec /usr/local/bin/salmon "$@"
+```
+
+- You can also `singularity exec` anything installed in the container. It doesn't have to be specified in `%runscript`.
+
+```{r, engine = 'bash', eval = FALSE, echo = TRUE}
+singularity exec bioconductor.simg which python
+singularity exec bioconductor.simg /usr/local/bin/python #works!
+```
+
+# Singularity recipes: "post"
+
+- install stuff not included in the base OS
+- this is usually where you spend your time
+```{r, engine = 'bash', eval = FALSE, echo = TRUE}
+%post
+    # install packages from bioconductor
+    Rscript -e "source('https://bioconductor.org/biocLite.R') ; \
+        biocLite(c('Cairo', \
+            'data.table', \
+            'extrafont', \
+            'ggimage', \
+            'ggtree', \
+            'sysfonts'), \
+    type='source', ask=FALSE)"
+```
+
+# Recipes are easy
+
+```{r, engine = 'bash', eval = FALSE, echo = TRUE}
+Bootstrap: docker
+From: combinelab/salmon:0.11.1
+
+%help
+    Salmon 0.11.1
+    https://github.com/COMBINE-lab/salmon/releases
+
+%labels
+    MAINTAINER "Tom Harrop (twharrop@gmail.com)"
+    VERSION "salmon 0.11.1"
+
+%runscript
+    exec /usr/local/bin/salmon "$@"
+```
+
+# Recipes are easy
+
+```{r, engine = 'bash', eval = FALSE, echo = TRUE}
+apt search salmon
+Sorting... Done
+Full Text Search... Done
+
+salmon/bionic 0.7.2+ds1-3 amd64
+  wicked-fast transcript quantification from RNA-seq data
+```
+
+# Recipes are easy
+
+```{r, engine = 'bash', eval = FALSE, echo = TRUE}
+Bootstrap: docker
+From: ubuntu:18.04
+
+%help
+    Salmon 0.7.2
+    https://github.com/COMBINE-lab/salmon/releases
+
+%labels
+    MAINTAINER "Tom Harrop (twharrop@gmail.com)"
+    VERSION "salmon 0.7.2"
+
+%post
+    apt-get update -y && apt-get install salmon
+
+%runscript
+    exec /usr/local/bin/salmon "$@"
+```
+
+# Recipes are fairly easy
+
+```{r, engine = 'bash', eval = FALSE, echo = TRUE}
+Bootstrap: debootstrap
+OSVersion: bionic
+MirrorURL: http://archive.ubuntu.com/ubuntu/
+Include: build-essential wget zlib1g-dev
+
+%help
+    STAR 2.6.0c
+    https://github.com/alexdobin/STAR/releases
+
+%labels
+    MAINTAINER "Tom Harrop (twharrop@gmail.com)"
+    VERSION "STAR 2.6.0c"
+```
+
+...
+
+# Recipes are fairly easy
+
+...
+
+```{r, engine = 'bash', eval = FALSE, echo = TRUE}
+
+%post
+    wget -O "star.tar.gz" \
+        --no-check-certificate \
+        https://github.com/alexdobin/STAR/archive/2.6.0c.tar.gz
+    mkdir star
+    tar -zxf star.tar.gz \
+        -C star \
+        --strip-components 1
+    cd star/source || exit 1
+    make
+    cp STAR /usr/local/bin
+    cd ../../ || exit 1
+    rm -rf star.tar.gz star
+```
+
+# Recipes can be a bit messy
+
+https://github.com/TomHarrop/singularity-containers/blob/master/tools/Singularity.BUSCO_3.0.2
+
+# Some software can't go in a container
+
+- Licensing issues *e.g.*
+  - http://www.cbs.dtu.dk/cgi-bin/sw_request?rnammer
+  - Can't distribute the RepeatMasker DB
+
+# Singularity
+
+- reproducible
+- portable
+- supported explicitly by `Snakemake`
+
+```{r, engine = 'python', eval = FALSE, echo = TRUE, python.reticulate = FALSE}
+rule bbduk_trim:
+    input:
+        'data/raw_reads/{sample}.fq.gz',
+    output:
+        'output/trimmed/{sample}.fq.gz'
+    singularity:
+        'shub://TomHarrop/singularity-containers:bbmap_38.00'
+    shell:
+        'bbduk.sh in={input} out={output}'
+```
+
+# Pain points of reproducible genomics
+
+- Slow initially
+- Getting software in containers
+- Duplication of effort
+
+# Who cares / why
+
+- most of the time you are the only one who reproduces your results
+- bonus to containers is easy installation / portability
