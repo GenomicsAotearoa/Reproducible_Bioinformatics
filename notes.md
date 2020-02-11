@@ -13,3 +13,6 @@
 - check academic twitter for complaints about conda
 
 - workflow managers allow you to run singularity transparently
+
+**Reproducible analysis stack**
+- requirements: singularity + python3 + git
