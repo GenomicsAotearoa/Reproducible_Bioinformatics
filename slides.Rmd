@@ -12,60 +12,6 @@ classoption: "aspectratio=169"
 date: "2020-02-12"
 ---
 
-```{r setup, include=FALSE, results="hide"}
-library(data.table)
-library(ggplot2)
-library(lubridate)
-
-set.seed(42)
-
-# enable Lato on Ubuntu
-my_sis <- Sys.info()["sysname"]
-if (my_sis == "Linux") {
-    sysfonts::font_add(
-        "Lato",
-        regular = "/usr/share/fonts/truetype/lato/Lato-Regular.ttf",
-        bold = "/usr/share/fonts/truetype/lato/Lato-Bold.ttf",
-        italic = "/usr/share/fonts/truetype/lato/Lato-Italic.ttf",
-        bolditalic = "/usr/share/fonts/truetype/lato/Lato-BoldItalic.ttf")
-}
-if(my_sis == "Darwin") {
-    sysfonts::font_add(
-        "Lato",
-        regular = "/Users/tom/Library/Fonts/Lato-Regular.ttf",
-        bold = "/Users/tom/Library/Fonts/Lato-Bold.ttf",
-        italic = "/Users/tom/Library/Fonts/Lato-Italic.ttf",
-        bolditalic = "/Users/tom/Library/Fonts/Lato-BoldItalic.ttf")
-}
-
-# knitr options that work with fig_height: 6, fig_width: 8, and fig_crop: false
-# in beamer presentations
-fh <- grid::convertUnit(unit(227, "pt"), "in", valueOnly = TRUE)
-fw <- grid::convertUnit(unit(398, "pt"), "in", valueOnly = TRUE)
-knitr::opts_chunk$set(
-    dev.args=list(bg = "transparent",
-                  family = "Lato",
-                  pointsize = 8),
-    dev="cairo_pdf",
-    echo = FALSE,
-    message = FALSE,
-    warning = FALSE,
-    cache = TRUE,
-    fig.align = 'center',
-    # out.width = "0.8\\textwidth",
-    # out.height  ="0.8\\textheight")
-    fig.height = fh * 0.9,
-    fig.width = fw,
-    out.width = NULL,
-    out.height = NULL)
-
-# colour scheme for plots
-Set1 <- RColorBrewer::brewer.pal(9, "Set1")
-alpha_set <- ggplot2::alpha(Set1, 0.5)
-heatscale <- RColorBrewer::brewer.pal(6, "YlOrRd")
-
-```
-
 # \hfill
 
 \begincols[c]
@@ -115,13 +61,13 @@ Guidelines for reproducible analysis:
 
 \source{Ziemann \emph{et al}., 2016. \href{https://doi.org/10.1186/s13059-016-1044-7}{10.1186/s13059-016-1044-7}}
 
-# 2. Point-and-click software is less likely to be reproducible
+# Point-and-click analysis may be hard to reproduce
 
 \centering
 
 ![](img/blast.png){height=2.8in}
 
-# 2. Running on-the-fly probably won't be reproducible
+# *Ad hoc* analysis may be hard to reproduce
 
 \begincols[t]
 \begincol{0.5\textwidth}
@@ -154,12 +100,12 @@ Guidelines for reproducible analysis:
 `my_workflow`:
 
 ```{r, engine = 'python', eval = FALSE, echo = TRUE, python.reticulate = FALSE}
-rule trim_adaptors:
+step trim_adaptors:
     input:  'data/raw_reads/{sample}.fastq',
     output: 'output/trimmed/{sample}.fastq'
     shell:  'trim_adaptors --raw_reads={input} > {output}'
 
-rule run_assembly:
+step run_assembly:
     input:  'output/trimmed/{sample}.fastq'
     output: 'output/assemblies/{sample}.fasta'
     shell:  'choice_assembler --reads={input} > {output}'
@@ -282,15 +228,17 @@ apt policy salmon 2> /dev/null | tail -n 6
 
 **Running directly**:
 
-```{r, engine = 'bash', eval = TRUE, echo = TRUE, cache = FALSE, error = TRUE, comment = NA}
+```{r, engine = 'bash', eval = FALSE, echo = TRUE, cache = FALSE, error = TRUE, comment = NA}
 salmon --help
 ```
+
+`Command 'salmon' not found, but can be installed with:`  
+`sudo apt install salmon`
 
 **Running with Singularity**:
 
 ```{r, engine = 'bash', eval = FALSE, echo = TRUE, cache = FALSE, error = TRUE, comment = NA}
-singularity exec \
-  salmon_1.1.0.sif \
+singularity exec salmon_1.1.0.sif \
   salmon --help
 ```
 
