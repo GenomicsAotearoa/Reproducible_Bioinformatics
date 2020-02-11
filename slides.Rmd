@@ -151,7 +151,7 @@ Guidelines for reproducible analysis:
 \begincols[c]
 \begincol{0.75\textwidth}
 
-**Define**:
+`my_workflow`:
 
 ```{r, engine = 'python', eval = FALSE, echo = TRUE, python.reticulate = FALSE}
 rule trim_adaptors:
@@ -168,7 +168,7 @@ rule run_assembly:
 **Run**:
 
 ```{r engine='bash', eval=FALSE, echo=TRUE}
-workflow_manager run_assembly
+workflow_manager my_workflow run_assembly
 ```
 
 \endcol
