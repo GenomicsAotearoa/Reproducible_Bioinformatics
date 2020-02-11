@@ -13,6 +13,7 @@
 - Nature news survey of 1500 "researchers" in 2016
 - Most researchers think there is a crisis in reproducibility
 - Many labs aren't doing anything about it
+- AFAIK journals aren't really doing enough either
 - It's up to us users to try to use good practices
 
 # 3. What is reproducibility?
@@ -46,7 +47,8 @@
 
 - Similarly if we run our analysis without recording it and/or without capturing the environment, we may not be able to reproduce the results
 - For example if we install software on our personal machines, or in our `$HOME` on shared machines, it may not run elsewhere
-- Similarly if the sysadmins install software for us on a compute node or make it available as a module, will it be possible to run elsewhere?
+- Likewise if sysadmins install software for us on a compute node or make it available as a module
+- Operating systems change and software stops working
 - In terms of recording the steps
 - If we run our analysis interactively, i.e. just type the commands into the console, we may not have full documentation of which commands and arguments we ran
 - Most bioinformaticians have probably been in the situation where someone has shown some results, been asked "did you use argument X or Y", and been unable to remember or not had a record
@@ -64,7 +66,7 @@
 
 # 8. Reproducibility and convenience
 
-- if the code is recorded in this way the results are actually disposable: we can just trash the output and run the workflow again to regenerate it
+- if the analysis is recorded in this way the results are actually disposable: we can just trash the output and run the workflow again to regenerate it
 - there is no need to document the code because it is recorded in the workflow file
 - convenience gain: the workflows can be written so the same step is run identically on different inputs
 - in general workflow managers are so convenient that i don't teach bash to students coming into the lab, any more.
@@ -99,10 +101,9 @@
 
 # 14. Workflow managers support containers and clusters
 
-- the big payoff is that workflow managers support running inside containers
+- the big payoff is that workflow managers support software containers
 - in this toy `snakemake` workflow, we're using a docker hub image for the trim\_adaptors software and a singularity hub image for the choice\_assembler software
 - snakemake will automatically and transparently handle pulling the containers and running the shell command inside the container
-
 
 # 13. Some barriers to container usage
 
@@ -112,12 +113,11 @@
 - A better model would be encouraging developers to provide official Docker builds. I think this is achievable as uptake increases, and maybe with some direct action. 
 - DTU (University of Technology Denmark) and Georgia Tech have released software with home-made licenses that prohibit distributing them in containers
 - Some commercial products like the "Genetic Information Research Institute" RepeatMasker database simply cannot be put in a container, leading to a choice between reproducibility and the software
-- Singularity is actually very easy to install but you may have to convince sysadmins to install it
-
+- Singularity is actually very easy to install but we may have to convince sysadmins to install it
 
 # 15. Reproducible analysis stack
 
-- I'm borrowing some out of context silicon valley jibberish and calling this a reproducible analysis stack
+- Out of context silicon valley jibberish! A reproducible analysis "stack"
 - To summarise:
     + you don't need anything to not modify the raw data
     + it's not a terrible idea to record the checksum, or make sure the data is read only
@@ -125,30 +125,3 @@
     + software containers capture the environment
 - should allow the analysis to be fully reproducible
 - only external dependencies for this particular stack are python3, singularity and git
-
-
-
-
-
-- convenience of WF managers (reuse the same code for all data)
-
-- check academic twitter for complaints about conda
-
-- workflow managers allow you to run singularity transparently
-
-**Reproducible analysis stack**
-- requirements: singularity + python3 + git
-
-# Pain points of reproducible genomics
-
-- Slow initially
-- Convince the sysadmins to install Singularity
-- Getting software in containers
-- Duplication of effort
-
-# Who cares / why
-
-- most of the time you are the only one who reproduces your results
-- bonus to containers is easy installation / portability
-
-**DO NOT SAY YOU**

@@ -55,19 +55,19 @@ Guidelines for reproducible analysis:
 
 \source{Adapted from Adam Labadorf's \href{https://bf528.readthedocs.io/en/latest/_downloads/c6a6675d4570f5ab61c8fe88cb429b8a/reproducibility.pdf}{slides}}
 
-# 1. Take care peeking at the data
+<!-- # 1. Take care peeking at the data -->
 
-![](img/genome_res.pdf){height=65mm}
+<!-- ![](img/genome_res.pdf){height=65mm} -->
 
-\source{Ziemann \emph{et al}., 2016. \href{https://doi.org/10.1186/s13059-016-1044-7}{10.1186/s13059-016-1044-7}}
+<!-- \source{Ziemann \emph{et al}., 2016. \href{https://doi.org/10.1186/s13059-016-1044-7}{10.1186/s13059-016-1044-7}} -->
 
-# Point-and-click analysis may be hard to reproduce
+<!-- # Point-and-click analysis may be hard to reproduce -->
 
-\centering
+<!-- \centering -->
 
-![](img/blast.png){height=2.8in}
+<!-- ![](img/blast.png){height=2.8in} -->
 
-# *Ad hoc* analysis may be hard to reproduce
+# Interactive analysis may be hard to reproduce
 
 \begincols[t]
 \begincol{0.5\textwidth}
@@ -76,7 +76,7 @@ Guidelines for reproducible analysis:
 
 - install software locally
 - use software installed by the admin
-- paste your commands directly into the console and hit enter
+- paste commands from a text file into the console
 - save a set of scripts to run in order
 
 \endcol
@@ -92,16 +92,16 @@ Guidelines for reproducible analysis:
 \endcol
 \endcols
 
-# 2. Workflow managers force you to record every step
+# Workflow managers force you to record every step
 
 \begincols[c]
 \begincol{0.75\textwidth}
 
-**Define `my_workflow`**:
+**Define steps in `my_workflow.txt`**
 
 ```{r, engine = 'python', eval = FALSE, echo = TRUE, python.reticulate = FALSE}
 step trim_adaptors:
-    input:  'data/raw_reads/{sample}.fastq',
+    input:  'data/raw_reads/{sample}.fastq'
     output: 'output/trimmed/{sample}.fastq'
     shell:  'trim_adaptors --raw_reads={input} > {output}'
 
@@ -114,7 +114,7 @@ step run_assembly:
 **Run**:
 
 ```{r engine='bash', eval=FALSE, echo=TRUE}
-workflow_manager my_workflow run_assembly
+workflow_manager my_workflow.txt run_assembly
 ```
 
 \endcol
@@ -125,7 +125,7 @@ workflow_manager my_workflow run_assembly
 \endcol
 \endcols
 
-# 2. Reproducibility and convenience
+# Reproducibility and convenience
 
 \begincols[c]
 \begincol{0.5\textwidth}
@@ -142,16 +142,16 @@ workflow_manager my_workflow run_assembly
 \vspace{24pt}
 
 **Lots of good options**:  
-**`snakemake`** ← `python3`  
-**` nextflow`** ← `java`  
-**`      CWL`** ← 'vendor-neutral specification'  
-**`    drake`** ← `R`  
-**`     make`** ← DIY
+**`snakemake`**  :  `python3`  
+**` nextflow`**  :  `java`  
+**`      CWL`**  :  'vendor-neutral specification'  
+**`    drake`**  :  `R`  
+**`     make`**  :  DIY
 
 \endcol
 \endcols
 
-# 3. Reproducible computing environment
+# Reproducible computing environment
 
 \begincols[c]
 \begincol{0.6\textwidth}
@@ -196,7 +196,7 @@ apt policy salmon 2> /dev/null | tail -n 6
 ```
  -->
 
-# 3. Software containers
+# Software containers
 
 \begincols[c]
 \begincol{0.6\textwidth}
@@ -242,7 +242,7 @@ singularity exec salmon_1.1.0.sif salmon --help | head -n 6 | tail -n 4
 ``` 
 -->
 
-# 3. Getting software in containers
+# Getting software in containers
 
 \begincols[c]
 \begincol{0.6\textwidth}
@@ -265,7 +265,7 @@ singularity pull \
 
 \source{\href{https://hub.docker.com/r/combinelab/salmon/tags}{hub.docker.com}}
 
-# 3. Getting software into containers
+# Getting software into containers
 
 \begincols[c]
 \begincol{0.5\textwidth}
@@ -299,23 +299,23 @@ From: ubuntu:18.10
 
 \source{\href{https://singularity-hub.org/containers/7300}{singularity-hub.org}}
 
-# 2 & 3. Workflow managers support containers
+# Workflow managers support containers
 
 ```{r, engine = 'python', eval = FALSE, echo = TRUE, python.reticulate = FALSE}
-rule trim_adaptors:
-    input:          'data/raw_reads/{sample}.fastq',
+step trim_adaptors:
+    input:          'data/raw_reads/{sample}.fastq'
     output:         'output/trimmed/{sample}.fastq'
     singularity:    'docker://my_repos/trim_adaptors:2.9'
     shell:          'trim_adaptors --raw_reads={input} > {output}'
 
-rule run_assembly:
+step run_assembly:
     input:           'output/trimmed/{sample}.fastq'
     output:          'output/assemblies/{sample}.fasta'
     singularity:     'shub://my_repos/choice_assembler:1.5'
     shell:           'choice_assembler --reads={input} > {output}'
 ```
 
-# 3. Some barriers to container usage
+# Some barriers to container usage
 
 - **Building containers can be painful** if the dependencies are disorganised
 - **Duplication of effort**
@@ -361,9 +361,9 @@ snakemake --drmaa " -q username" -j 32
 \endcol
 \endcols
 
-![](img/idea.png){height=25mm}
+<!-- ![](img/idea.png){height=25mm} -->
 
-\source{\href{https://snakemake.readthedocs.io/en/stable/project_info/faq.html}{snakemake.readthedocs.io}}
+<!-- \source{\href{https://snakemake.readthedocs.io/en/stable/project_info/faq.html}{snakemake.readthedocs.io}} -->
 
 # Getting started
 
