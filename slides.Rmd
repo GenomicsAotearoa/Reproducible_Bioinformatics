@@ -86,33 +86,42 @@ heatscale <- RColorBrewer::brewer.pal(6, "YlOrRd")
 
 **Reproduce**: under identical conditions to the previous result, repeat the analysis and get the **exact** same result
 
+\begincols[t]
+\begincol{0.4\textwidth}
+
 In bionformatics:
 
 - **same data**
 - **same methodology** (code)
 - **same result**
 
-For reproducible bioinformatics:
+\endcol
+\begincol{0.4\textwidth}
+
+For reproducible analysis:
 
 1. Don't modify raw data
 2. Record the code
 3. Capture the computing environment
 
+\endcol
+\endcols
+
 \source{Adapted from Adam Labadorf's \href{https://bf528.readthedocs.io/en/latest/_downloads/c6a6675d4570f5ab61c8fe88cb429b8a/reproducibility.pdf}{slides}}
 
-# No peeking at the data
+# 1. No peeking at the data
 
-![](img/genome_res.pdf){height=50mm}
+![](img/genome_res.pdf){height=65mm}
 
 \source{Ziemann \emph{et al}., 2016. \href{https://doi.org/10.1186/s13059-016-1044-7}{10.1186/s13059-016-1044-7}}
 
-# Point-and-click software is less likely to be reproducible
+# 2. Point-and-click software is less likely to be reproducible
 
 \centering
 
 ![](img/blast.png){height=2.8in}
 
-# Running on the fly probably won't be reproducible
+# 2. Running on the fly probably won't be reproducible
 
 \begincols[c]
 \begincol{0.5\textwidth}
@@ -137,7 +146,7 @@ For reproducible bioinformatics:
 \endcol
 \endcols
 
-# Workflow managers force you to record every step
+# 2. Workflow managers force you to record every step
 
 \begincols[c]
 \begincol{0.75\textwidth}
@@ -162,7 +171,7 @@ rule run_assembly:
 \endcol
 \endcols
 
-# Reproducibility and convenience
+# 2. Reproducibility and convenience
 
 \begincols[c]
 \begincol{0.5\textwidth}
@@ -188,7 +197,7 @@ rule run_assembly:
 \endcol
 \endcols
 
-# Reproducible computing environment
+# 3. Reproducible computing environment
 
 \begincols[c]
 \begincol{0.6\textwidth}
@@ -212,7 +221,7 @@ Software has
 
 \source{Adapted from Adam Labadorf's \href{https://bf528.readthedocs.io/en/latest/_downloads/c6a6675d4570f5ab61c8fe88cb429b8a/reproducibility.pdf}{slides}}
 
-# Reproducible computing environment
+# 3. Reproducible computing environment
 
 **On our department's hardware**:
 
@@ -233,7 +242,7 @@ apt policy salmon 2> /dev/null | tail -n 6
 ```
 
 
-# Software containers
+# 3. Software containers
 
 \begincols[c]
 \begincol{0.6\textwidth}
@@ -261,7 +270,7 @@ apt policy salmon 2> /dev/null | tail -n 6
 
 \source{\href{https://sylabs.io/guides/3.5/user-guide/introduction.html}{sylabs.io}}
 
-# Singularity containers
+# 3. Singularity containers
 
 **Running directly**:
 
@@ -281,7 +290,7 @@ singularity exec \
 singularity exec salmon_1.1.0.sif salmon --help | head -n 6 | tail -n 4
 ```
 
-# Getting software in containers
+# 3. Getting software in containers
 
 \begincols[c]
 \begincol{0.6\textwidth}
@@ -304,7 +313,7 @@ singularity pull \
 
 \source{\href{https://hub.docker.com/r/combinelab/salmon/tags}{hub.docker.com}}
 
-# Getting software into containers
+# 3. Getting software into containers
 
 \begincols[c]
 \begincol{0.5\textwidth}
@@ -338,13 +347,21 @@ From: ubuntu:18.10
 
 \source{\href{https://singularity-hub.org/containers/7300}{singularity-hub.org}}
 
-# Some software can't go in a container
 
-- Licensing issues *e.g.*
-  - http://www.cbs.dtu.dk/cgi-bin/sw_request?rnammer
-  - Can't distribute the RepeatMasker DB
+# 3. Barriers to container usage
 
-# Workflow managers support containers and clusters
+- **Building containers can be a pain**
+- **Duplication of effort**
+- **Some software ~~can't~~ shouldn't go in a container**
+because of "unfortunate licensing issues"  
+  - DTU software e.g. `rnammer`, `tmhmm`  
+  - GATech software e.g. `GeneMark` 
+  - GIRInst's `RepBase`
+- **Getting `Singularity` installed**
+
+\source{See the DTU's license \href{http://www.cbs.dtu.dk/cgi-bin/sw_request?rnammer}{here}}
+
+# 2 & 3. Workflow managers support containers and clusters
 
 ```{r, engine = 'python', eval = FALSE, echo = TRUE, python.reticulate = FALSE}
 rule trim_adaptors:
@@ -368,8 +385,8 @@ snakemake --drmaa " -q username" -j 32
 
 # Reproducible analysis stack
 
-\begincols[c]
-\begincol{0.50\textwidth}
+\begincols[t]
+\begincol{0.4\textwidth}
 
 For reproducible bioinformatics:
 
@@ -379,19 +396,17 @@ For reproducible bioinformatics:
 3. Capture the computing environment
 
 \endcol
-\begincol{0.50\textwidth}
+\begincol{0.6\textwidth}
 
 \bigskip
 
   `chmod 444 raw_reads.fastq` ?  
-  Workflow manager (`snakemake`, `nextflow`)  
+  + Workflow manager (`snakemake`, `nextflow`)  
   + VCS (`git`)  
-  Software containers (`Singularity`)
+  + Software containers (`Singularity`)
 
 \endcol
 \endcols
-
-\vspace{10mm}
 
 ![](img/idea.png){height=25mm}
 
