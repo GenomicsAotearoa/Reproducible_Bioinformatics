@@ -87,18 +87,18 @@ heatscale <- RColorBrewer::brewer.pal(6, "YlOrRd")
 **Reproduce**: under identical conditions to the previous result, repeat the analysis and get the **exact** same result
 
 \begincols[t]
-\begincol{0.4\textwidth}
+\begincol{0.5\textwidth}
 
-In bionformatics:
+In bioinformatics:
 
 - **same data**
 - **same methodology** (code)
 - **same result**
 
 \endcol
-\begincol{0.4\textwidth}
+\begincol{0.5\textwidth}
 
-For reproducible analysis:
+Guidelines for reproducible analysis:
 
 1. Don't modify raw data
 2. Record the code
@@ -109,7 +109,7 @@ For reproducible analysis:
 
 \source{Adapted from Adam Labadorf's \href{https://bf528.readthedocs.io/en/latest/_downloads/c6a6675d4570f5ab61c8fe88cb429b8a/reproducibility.pdf}{slides}}
 
-# 1. No peeking at the data
+# 1. Take care peeking at the data
 
 ![](img/genome_res.pdf){height=65mm}
 
@@ -121,9 +121,9 @@ For reproducible analysis:
 
 ![](img/blast.png){height=2.8in}
 
-# 2. Running on the fly probably won't be reproducible
+# 2. Running on-the-fly probably won't be reproducible
 
-\begincols[c]
+\begincols[t]
 \begincol{0.5\textwidth}
 
 **Examples**:
@@ -151,6 +151,8 @@ For reproducible analysis:
 \begincols[c]
 \begincol{0.75\textwidth}
 
+**Define**:
+
 ```{r, engine = 'python', eval = FALSE, echo = TRUE, python.reticulate = FALSE}
 rule trim_adaptors:
     input:  'data/raw_reads/{sample}.fastq',
@@ -161,6 +163,12 @@ rule run_assembly:
     input:  'output/trimmed/{sample}.fastq'
     output: 'output/assemblies/{sample}.fasta'
     shell:  'choice_assembler --reads={input} > {output}'
+```
+
+**Run**:
+
+```{r engine='bash', eval=FALSE, echo=TRUE}
+workflow_manager run_assembly
 ```
 
 \endcol
@@ -348,14 +356,14 @@ From: ubuntu:18.10
 \source{\href{https://singularity-hub.org/containers/7300}{singularity-hub.org}}
 
 
-# 3. Barriers to container usage
+# 3. Some barriers to container usage
 
-- **Building containers can be a pain**
+- **Building containers can be painful** if the dependencies are disorganised
 - **Duplication of effort**
 - **Some software ~~can't~~ shouldn't go in a container**
 because of "unfortunate licensing issues"  
-  - DTU software e.g. `rnammer`, `tmhmm`  
-  - GATech software e.g. `GeneMark` 
+  - DTU software *e.g.* `rnammer`, `tmhmm`  
+  - GATech: `GeneMark` 
   - GIRInst's `RepBase`
 - **Getting `Singularity` installed**
 
@@ -388,7 +396,7 @@ snakemake --drmaa " -q username" -j 32
 \begincols[t]
 \begincol{0.4\textwidth}
 
-For reproducible bioinformatics:
+**Guidelines**:
 
 1. Don't modify raw data
 2. Record the code  
@@ -398,9 +406,9 @@ For reproducible bioinformatics:
 \endcol
 \begincol{0.6\textwidth}
 
-\bigskip
+**Stack**:
 
-  `chmod 444 raw_reads.fastq` ?  
+  `md5sum raw_reads.fastq`? `chmod 444`?   
   + Workflow manager (`snakemake`, `nextflow`)  
   + VCS (`git`)  
   + Software containers (`Singularity`)
@@ -411,18 +419,6 @@ For reproducible bioinformatics:
 ![](img/idea.png){height=25mm}
 
 \source{\href{https://snakemake.readthedocs.io/en/stable/project_info/faq.html}{snakemake.readthedocs.io}}
-
-# Pain points of reproducible genomics
-
-- Slow initially
-- Convince the sysadmins to install Singularity
-- Getting software in containers
-- Duplication of effort
-
-# Who cares / why
-
-- most of the time you are the only one who reproduces your results
-- bonus to containers is easy installation / portability
 
 # Getting started
 

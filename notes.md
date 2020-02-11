@@ -16,3 +16,15 @@
 
 **Reproducible analysis stack**
 - requirements: singularity + python3 + git
+
+# Pain points of reproducible genomics
+
+- Slow initially
+- Convince the sysadmins to install Singularity
+- Getting software in containers
+- Duplication of effort
+
+# Who cares / why
+
+- most of the time you are the only one who reproduces your results
+- bonus to containers is easy installation / portability
