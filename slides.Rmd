@@ -76,7 +76,7 @@ Guidelines for reproducible analysis:
 
 - install software locally
 - use software installed by the admin
-- type your commands directly into the console and hit enter!
+- paste your commands directly into the console and hit enter
 - save a set of scripts to run in order
 
 \endcol
@@ -85,9 +85,9 @@ Guidelines for reproducible analysis:
 **Possible issues**:
 
 - will it run again?
-- are **all** the steps documented?
-- is the code you recorded the same as the code you ran?
-- did you correctly record the order of steps?
+- are all the steps documented?
+- is the recorded code exactly what was run?
+- are the steps in the right order?
 
 \endcol
 \endcols
@@ -97,7 +97,7 @@ Guidelines for reproducible analysis:
 \begincols[c]
 \begincol{0.75\textwidth}
 
-`my_workflow`:
+**Define `my_workflow`**:
 
 ```{r, engine = 'python', eval = FALSE, echo = TRUE, python.reticulate = FALSE}
 step trim_adaptors:
@@ -175,7 +175,7 @@ Software has
 
 \source{Adapted from Adam Labadorf's \href{https://bf528.readthedocs.io/en/latest/_downloads/c6a6675d4570f5ab61c8fe88cb429b8a/reproducibility.pdf}{slides}}
 
-# 3. Reproducible computing environment
+<!-- # 3. Reproducible computing environment
 
 **On our department's hardware**:
 
@@ -194,7 +194,7 @@ apt policy salmon
 ```{r, engine = 'bash', eval = TRUE, echo = FALSE, cache = FALSE, error = TRUE, comment = NA, warn = FALSE}
 apt policy salmon 2> /dev/null | tail -n 6
 ```
-
+ -->
 
 # 3. Software containers
 
@@ -203,14 +203,9 @@ apt policy salmon 2> /dev/null | tail -n 6
 
 - Isolated, complete environment (a mini OS)
 - Contain specific version of software with dependencies
-
-\vspace{14pt}
-
-**Singularity**:
-
 - Mobility of compute
 - Reproducibility
-- Support on existing traditional HPC
+- `Singularity` can run on traditional HPC
 
 \endcol
 \begincol{0.4\textwidth}
@@ -224,7 +219,7 @@ apt policy salmon 2> /dev/null | tail -n 6
 
 \source{\href{https://sylabs.io/guides/3.5/user-guide/introduction.html}{sylabs.io}}
 
-# 3. Singularity containers
+<!-- # 3. Singularity containers
 
 **Running directly**:
 
@@ -244,7 +239,8 @@ singularity exec salmon_1.1.0.sif \
 
 ```{r, engine = 'bash', eval = TRUE, echo = FALSE, cache = FALSE, error = TRUE, comment = NA}
 singularity exec salmon_1.1.0.sif salmon --help | head -n 6 | tail -n 4
-```
+``` 
+-->
 
 # 3. Getting software in containers
 
@@ -274,7 +270,7 @@ singularity pull \
 \begincols[c]
 \begincol{0.5\textwidth}
 
-- Usually have to build it yourself
+- Often have to build our own containers
 
 \bigskip
 
@@ -303,21 +299,7 @@ From: ubuntu:18.10
 
 \source{\href{https://singularity-hub.org/containers/7300}{singularity-hub.org}}
 
-
-# 3. Some barriers to container usage
-
-- **Building containers can be painful** if the dependencies are disorganised
-- **Duplication of effort**
-- **Some software ~~can't~~ shouldn't go in a container**
-because of "unfortunate licensing issues"  
-  - DTU software *e.g.* `rnammer`, `tmhmm`  
-  - GATech: `GeneMark` 
-  - GIRInst's `RepBase`
-- **Getting `Singularity` installed**
-
-\source{See the DTU's license \href{http://www.cbs.dtu.dk/cgi-bin/sw_request?rnammer}{here}}
-
-# 2 & 3. Workflow managers support containers and clusters
+# 2 & 3. Workflow managers support containers
 
 ```{r, engine = 'python', eval = FALSE, echo = TRUE, python.reticulate = FALSE}
 rule trim_adaptors:
@@ -333,11 +315,26 @@ rule run_assembly:
     shell:           'choice_assembler --reads={input} > {output}'
 ```
 
-**Cluster execution**, *e.g.*:
+# 3. Some barriers to container usage
+
+- **Building containers can be painful** if the dependencies are disorganised
+- **Duplication of effort**
+- **Some software shouldn't go in a container**
+because of "unfortunate licensing issues"  
+  - DTU software *e.g.* `rnammer`, `tmhmm`  
+  - GATech: `GeneMark` 
+  - GIRInst's `RepBase`
+- **Getting `Singularity` installed**
+
+\source{See the DTU's license \href{http://www.cbs.dtu.dk/cgi-bin/sw_request?rnammer}{here}}
+
+
+<!-- **Cluster execution**, *e.g.*:
 
 ```{r, engine = 'bash', eval = FALSE, echo = TRUE}
 snakemake --drmaa " -q username" -j 32
 ```
+ -->
 
 # Reproducible analysis stack
 
@@ -370,21 +367,32 @@ snakemake --drmaa " -q username" -j 32
 
 # Getting started
 
+\begincols[t]
+\begincol{0.45\textwidth}
+
 **Reproducibility for bioinformatics**:
 
-- online lectures e.g. [Adam Labadorf](https://bf528.readthedocs.io/en/latest/content/15_replicability_vs_reproducibility_strategies/replicability_vs_reproducibility_strategies.html#lectures) of Boston Uni
+- Joep de Ligt: *Scalable workflows and reproducible data analysis for genomics*
+- plenty of online talks e.g. [Adam Labadorf](https://bf528.readthedocs.io/en/latest/content/15_replicability_vs_reproducibility_strategies/replicability_vs_reproducibility_strategies.html#lectures) of Boston Uni
 
 **Workflow managers**:
 
 - [Snakemake Tutorial](https://snakemake.readthedocs.io/en/stable/tutorial/tutorial.html)
 - Nextflow: [Get started](https://www.nextflow.io/docs/latest/getstarted.html)
 
+\endcol
+\begincol{0.45\textwidth}
+
 **Software containers**:
 
+- Blair Bethwaite: *Containers in HPC* Tutorial
 - Singularity [Quick Start](https://sylabs.io/guides/3.5/user-guide/quick_start.html)
 
 **Version control**:
 
 - memorise a handful of `git` commands
+
+\endcol
+\endcols
 
 \source{These slides: \href{https://github.com/TomHarrop/eresearch2020}{https://github.com/TomHarrop/eresearch2020}}
