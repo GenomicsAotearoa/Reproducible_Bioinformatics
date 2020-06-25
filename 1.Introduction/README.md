@@ -11,11 +11,18 @@
 
 ## Use software without installing it
 
-- example
+- example?
+- don't need admin rights to install
 
 ## Use software that has a lot of dependencies
 
 - example (probably funannotate)
+
+`funannotate` dependencies^\*^
+
+![](img/screenshot-funannotate.readthedocs.io-2020.06.25-16_06_44.png)
+
+\* that the developer knows about
 
 ## Use software that needs newer libraries
 
