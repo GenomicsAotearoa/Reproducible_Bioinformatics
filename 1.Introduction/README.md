@@ -20,9 +20,9 @@
 
 `funannotate` dependencies\*
 
-![](../img/screenshot-funannotate.readthedocs.io-2020.06.25-16_06_44.png)
+![](../img/screenshot-funannotate.readthedocs.io-2020.06.25-16_11_20.png)
 
-\* that the developer knows about
+\* a subset
 
 ## Use software that needs newer libraries
 
