@@ -18,9 +18,9 @@
 
 - example (probably funannotate)
 
-`funannotate` dependencies^\*^
+`funannotate` dependencies\*
 
-![](img/screenshot-funannotate.readthedocs.io-2020.06.25-16_06_44.png)
+![](../img/screenshot-funannotate.readthedocs.io-2020.06.25-16_06_44.png)
 
 \* that the developer knows about
 
