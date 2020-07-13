@@ -162,6 +162,163 @@ Finding genes in sequence #5 (625 bp)...done!
 ```
 
 ### Step 4.
+Assembly Comparisons
+```
+singularity run ../quast_latest.sif quast Assemblies/*fa --glimmer -t 32
+```
 
 
+### Step 5.
+Gene Prediction Comparison
+```
+singularity run ../orthofinder_latest.sif orthofinder -t 64 -f proteins/
+less -S \
+    proteins/OrthoFinder/Results_Jul13_1/Comparative_Genomics_Statistics/Statistics_Overall.tsv
 
+less -S \
+    proteins/OrthoFinder/Results_Jul13_1/Comparative_Genomics_Statistics/   Statistics_PerSpecies.tsv
+
+```
+
+Output:
+```
+OrthoFinder version 2.3.12 Copyright (C) 2014 David Emms
+
+2020-07-13 14:32:24 : Starting OrthoFinder
+64 thread(s) for highly parallel tasks (BLAST searches etc.)
+1 thread(s) for OrthoFinder algorithm
+
+Checking required programs are installed
+----------------------------------------
+Test can run "mcl -h" - ok
+Test can run "fastme -i /home/josephguhlin/development/Reproducible_Bioinformatics/2.Tutorial/0.Preparation/do_prep/proteins/OrthoFinder/Results_Jul13_1/WorkingDirectory/SimpleTest.phy -o /home/josephguhlin/development/Reproducible_Bioinformatics/2.Tutorial/0.Preparation/do_prep/proteins/OrthoFinder/Results_Jul13_1/WorkingDirectory/SimpleTest.tre" - ok
+
+Dividing up work for BLAST for parallel processing
+--------------------------------------------------
+2020-07-13 14:32:25 : Creating diamond database 1 of 9
+2020-07-13 14:32:25 : Creating diamond database 2 of 9
+2020-07-13 14:32:25 : Creating diamond database 3 of 9
+2020-07-13 14:32:25 : Creating diamond database 4 of 9
+2020-07-13 14:32:25 : Creating diamond database 5 of 9
+2020-07-13 14:32:25 : Creating diamond database 6 of 9
+2020-07-13 14:32:25 : Creating diamond database 7 of 9
+2020-07-13 14:32:25 : Creating diamond database 8 of 9
+2020-07-13 14:32:25 : Creating diamond database 9 of 9
+
+Running diamond all-versus-all
+------------------------------
+Using 64 thread(s)
+2020-07-13 14:32:25 : This may take some time....
+2020-07-13 14:32:25 : Done 0 of 81
+2020-07-13 14:33:02 : Done 10 of 81
+2020-07-13 14:34:33 : Done all-versus-all sequence search
+
+Running OrthoFinder algorithm
+-----------------------------
+2020-07-13 14:34:34 : Initial processing of each species
+2020-07-13 14:34:40 : Initial processing of species 0 complete
+2020-07-13 14:34:46 : Initial processing of species 1 complete
+2020-07-13 14:35:00 : Initial processing of species 2 complete
+2020-07-13 14:35:13 : Initial processing of species 3 complete
+2020-07-13 14:35:38 : Initial processing of species 4 complete
+2020-07-13 14:35:54 : Initial processing of species 5 complete
+2020-07-13 14:36:07 : Initial processing of species 6 complete
+2020-07-13 14:36:14 : Initial processing of species 7 complete
+2020-07-13 14:36:19 : Initial processing of species 8 complete
+2020-07-13 14:36:29 : Connected putative homologues
+2020-07-13 14:36:30 : Written final scores for species 0 to graph file
+2020-07-13 14:36:32 : Written final scores for species 1 to graph file
+2020-07-13 14:36:34 : Written final scores for species 2 to graph file
+2020-07-13 14:36:37 : Written final scores for species 3 to graph file
+2020-07-13 14:36:41 : Written final scores for species 4 to graph file
+2020-07-13 14:36:45 : Written final scores for species 5 to graph file
+2020-07-13 14:36:48 : Written final scores for species 6 to graph file
+2020-07-13 14:36:49 : Written final scores for species 7 to graph file
+2020-07-13 14:36:51 : Written final scores for species 8 to graph file
+Exception RuntimeError: RuntimeError('cannot join current thread',) in <Finalize object, dead> ignored
+
+WARNING: program called by OrthoFinder produced output to stderr
+
+Command: mcl /home/josephguhlin/development/Reproducible_Bioinformatics/2.Tutorial/0.Preparation/do_prep/proteins/OrthoFinder/Results_Jul13_1/WorkingDirectory/OrthoFinder_graph.txt -I 1.5 -o /home/josephguhlin/development/Reproducible_Bioinformatics/2.Tutorial/0.Preparation/do_prep/proteins/OrthoFinder/Results_Jul13_1/WorkingDirectory/clusters_OrthoFinder_I1.5.txt -te 1 -V all
+
+stdout
+------
+
+stderr
+------
+[mcl] cut <95> instances of overlap
+
+2020-07-13 14:37:07 : Ran MCL
+
+Writing orthogroups to file
+---------------------------
+OrthoFinder assigned 79628 genes (92.1% of total) to 9551 orthogroups. Fifty percent of all genes were in orthogroups with 9 or more genes (G50 was 9) and were contained in the largest 3008 orthogroups (O50 was 3008). There were 4002 orthogroups with all species present and 2290 of these consisted entirely of single-copy genes.
+
+2020-07-13 14:37:10 : Done orthogroups
+
+Analysing Orthogroups
+=====================
+
+Calculating gene distances
+--------------------------
+2020-07-13 14:38:54 : Done
+
+Inferring gene and species trees
+--------------------------------
+2020-07-13 14:38:54 : Done 0 of 7197
+2020-07-13 14:38:54 : Done 1000 of 7197
+2020-07-13 14:38:55 : Done 2000 of 7197
+2020-07-13 14:38:55 : Done 3000 of 7197
+2020-07-13 14:38:56 : Done 4000 of 7197
+2020-07-13 14:38:56 : Done 5000 of 7197
+2020-07-13 14:38:57 : Done 6000 of 7197
+2020-07-13 14:38:57 : Done 7000 of 7197
+
+4002 trees had all species present and will be used by STAG to infer the species tree
+
+Best outgroup(s) for species tree
+---------------------------------
+2020-07-13 14:40:02 : Starting STRIDE
+2020-07-13 14:40:04 : Done STRIDE
+Observed 10 well-supported, non-terminal duplications. 10 support the best root and 0 contradict it.
+Best outgroup for species tree:
+  Ps_Cucurbits.contigs, Pst.contigs
+
+Reconciling gene trees and species tree
+---------------------------------------
+Outgroup: Ps_Cucurbits.contigs, Pst.contigs
+2020-07-13 14:40:04 : Starting Recon and orthologues
+2020-07-13 14:40:04 : Starting OF Orthologues
+Exception RuntimeError: RuntimeError('cannot join current thread',) in <Finalize object, dead> ignored
+2020-07-13 14:40:06 : Done 0 of 7197
+2020-07-13 14:40:25 : Done 1000 of 7197
+2020-07-13 14:40:30 : Done 2000 of 7197
+2020-07-13 14:40:34 : Done 3000 of 7197
+2020-07-13 14:40:39 : Done 4000 of 7197
+2020-07-13 14:40:43 : Done 5000 of 7197
+2020-07-13 14:40:46 : Done 6000 of 7197
+2020-07-13 14:40:48 : Done 7000 of 7197
+2020-07-13 14:40:48 : Done OF Orthologues
+2020-07-13 14:40:49 : Done Recon
+
+Writing results files
+=====================
+2020-07-13 14:40:49 : Done orthologues
+
+Results:
+    /home/josephguhlin/development/Reproducible_Bioinformatics/2.Tutorial/0.Preparation/do_prep/proteins/OrthoFinder/Results_Jul13_1/
+
+CITATION:
+ When publishing work that uses OrthoFinder please cite:
+ Emms D.M. & Kelly S. (2019), Genome Biology 20:238
+
+ If you use the species tree in your work then please also cite:
+ Emms D.M. & Kelly S. (2017), MBE 34(12): 3267-3278
+ Emms D.M. & Kelly S. (2018), bioRxiv https://doi.org/10.1101/267914
+
+________________________________________________________
+Executed in  508.02 secs   fish           external 
+   usr time   57.13 mins  714.00 micros   57.13 mins 
+   sys time    3.05 mins   59.00 micros    3.05 mins 
+
+```
