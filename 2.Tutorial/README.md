@@ -178,7 +178,11 @@ less -S \
 less -S \
     proteins/OrthoFinder/Results_Jul13_1/Comparative_Genomics_Statistics/   Statistics_PerSpecies.tsv
 
+cat proteins/OrthoFinder/Results_Jul13_1/Species_Tree/SpeciesTree_rooted.txt 
 ```
+Copy the newick tree. It will look like: ```((Pst.contigs:0.0247923,Ps_Cucurbits.contigs:0.0371305)0.9008:0.0203521,((Psa_M228.contigs:0.00120068,(Psa_C3.contigs:0.000848172,(Psa_C14.contigs:0.000135925,((Psa_C10.contigs:0.000169986,Psa_C11.contigs:0.000140465)0.661419:4.6123e-05,Psa_C12.contigs:0.000226006)0.646677:7.04282e-06)0.651174:0.000926819)0.63943:0.000758788)0.772864:0.0223033,Ps_DC3000.contigs:0.0162112)0.9008:0.0203521);```
+Go to icytree.org and press *e*
+Paste in your tree and click *Done*
 
 Output:
 ```
