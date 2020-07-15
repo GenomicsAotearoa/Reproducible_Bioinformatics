@@ -26,8 +26,10 @@ pigz Psa_M228_1.fastq
 pigz Psa_M228_2.fastq
 ```
 
-
 ** 
 * Check that you can run containers
 
 * Check md5sum of downloaded data
+
+# Refresher
+Have a refresher in [BASH](https://linuxconfig.org/bash-scripting-tutorial-for-beginners)
