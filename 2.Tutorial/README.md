@@ -11,27 +11,11 @@
 - Check `-B` arguments in case of weird paths to working directory.
 - Get these containers onto computers (don't rely on `shub`):
     + `shub://TomHarrop/seq-utils:adapterremoval_2.1.3`
-    + `shub://TomHarrop/assembles:spades_3.14.1`
-    + TODO: Make into a container [Prodigal](https://github.com/hyattpd/Prodigal)
+    + [Prodigal](https://github.com/hyattpd/Prodigal)
 - Download data
 
-### Data
-
-Download SRA SRR8452644 and rename to Ps_Cucurbits_1.fastq.gz and Ps_Cucurbits_2.fastq.gz
-
-```bash
-mkdir Sequence
-cd Sequence
-fasterq-dump SRR8177059
-mv SRR8177059_1.fastq Psa_M228_1.fastq
-mv SRR8177059_2.fastq Psa_M228_2.fastq
-pigz Psa_M228_1.fastq
-pigz Psa_M228_2.fastq
-```
-
 ### Step 1. 
-
-- [adaptor removal](https://github.com/jguhlin/nextflow-training/blob/master/pieces/tutorial.md)
+Adapter Removal and Collapsing
 
 ```
 singularity exec adapterremoval_2.1.3.sif \
@@ -45,8 +29,7 @@ singularity exec adapterremoval_2.1.3.sif \
 ```
 
 ### Step 2.
-*Use megahit instead?*
-- [assembly](https://github.com/jguhlin/nextflow-training/blob/master/pieces/tutorial.md)
+Assemble with MegaHit
 
 ```
 zcat *collapsed*gz > Psa_M228_merged.fq
@@ -114,20 +97,8 @@ singularity run ~/megahit_latest.sif \
 2020-07-13 13:32:44 - ALL DONE. Time elapsed: 257.920622 seconds
 ```
 
-*Ignore Spades I think*
-```
-singularity exec spades_3.14.1.sif \
-    spades.py \
-        -o output \
-        -1 Psa_M228.pair1.truncated.gz -2 Psa_M228.pair2.truncated.gz \
-        --merged Psa_M228_merged.fq.gz \
-        -s Psa_M228.singleton.truncated.gz \
-        -t 12 \
-        -m 64 \
-        --careful
-```
-
 ### Step 3.
+Predict Genes with Prodigal
 
 ```
 singularity run prodigal_latest.sif \
@@ -162,16 +133,17 @@ Finding genes in sequence #5 (625 bp)...done!
 ```
 
 ### Step 4.
-Assembly Comparisons
+Compare Assemblies with QUAST
 ```
 singularity run ../quast_latest.sif quast Assemblies/*fa --glimmer -t 32
 ```
 
 
 ### Step 5.
-Gene Prediction Comparison
+Compare Proteomes with OrthoFinder
 ```
-singularity run ../orthofinder_latest.sif orthofinder -t 64 -f proteins/
+singularity run ../orthofinder_latest.sif orthofinder -t 32 -f proteins/
+
 less -S \
     proteins/OrthoFinder/Results_Jul13_1/Comparative_Genomics_Statistics/Statistics_Overall.tsv
 
@@ -180,8 +152,9 @@ less -S \
 
 cat proteins/OrthoFinder/Results_Jul13_1/Species_Tree/SpeciesTree_rooted.txt 
 ```
-Copy the newick tree. It will look like: ```((Pst.contigs:0.0247923,Ps_Cucurbits.contigs:0.0371305)0.9008:0.0203521,((Psa_M228.contigs:0.00120068,(Psa_C3.contigs:0.000848172,(Psa_C14.contigs:0.000135925,((Psa_C10.contigs:0.000169986,Psa_C11.contigs:0.000140465)0.661419:4.6123e-05,Psa_C12.contigs:0.000226006)0.646677:7.04282e-06)0.651174:0.000926819)0.63943:0.000758788)0.772864:0.0223033,Ps_DC3000.contigs:0.0162112)0.9008:0.0203521);```
-Go to icytree.org and press *e*
+Copy the newick tree. It will look like: ```((Pst.contigs:0.0247923,Ps_Cucurbits.contigs:0.0371305)0.9008:0.0203521,((Psa_M228.contigs:0.00120068,(Psa_C3.contigs:0.000848172,(Psa_C14.contigs:0.000135925,((Psa_C10.contigs:0.000169986,Psa_C11.contigs:0.000140465)0.661419:4.6123e-05,Psa_C12.contigs:0.000226006)0.646677:7.04282e-06)0.651174:0.000926819)0.63943:0.000758788)0.772864:0.0223033,Ps_DC3000.contigs:0.0162112)0.9008:0.0203521);
+```
+Go to [icytree](icytree.org) and press *e*
 Paste in your tree and click *Done*
 
 Output:
