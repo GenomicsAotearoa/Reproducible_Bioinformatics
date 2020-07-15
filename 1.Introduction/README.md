@@ -34,8 +34,6 @@ singularity exec funnanotate.sif \
 - HPC admins may not be willing / able to install messy software
 - *e.g.* `funannotate` has dozens of dependencies (this is a subset)
 
-![](../img/screenshot-funannotate.readthedocs.io-2020.06.25-16_11_20.png "Funannotate dependencies")
-
 ```bash
 singularity exec funnanotate.sif \
     funannotate predict \
@@ -70,7 +68,7 @@ spades:
 
 - singularity is compatible with docker containers
 
-![](../img/screenshot-hub.docker.com-2020.02.11-13_39_25.png){height=60mm}
+![](../img/screenshot-hub.docker.com-2020.02.11-13_39_25.png)
 
 ### biocontainers
 
