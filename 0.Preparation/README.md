@@ -11,20 +11,10 @@ Containers are available on NeSI at: ...path...
 If working remote, you can download them from [Google Drive](https://drive.google.com/drive/folders/1QpyTKDd4FIBoRaNKieCCbySyNVGvzGkv?usp=sharing)
 
 ## Download Data
-[from Google Drive](https://drive.google.com/drive/folders/1RQ2PxqP7y8REgPbBqMEikn25fhBwSxw3?usp=sharing)
+(part of the repo using git LFS)
 
-And also from SRA
+`wget https://github.com/blah/all_guppy.fastq`
 
-Download SRA SRR8452644 and rename to Psa_M228_1.fastq.gz and Psa_M228_2.fastq.gz
-```bash
-mkdir Sequence
-cd Sequence
-fasterq-dump SRR8177059
-mv SRR8177059_1.fastq Psa_M228_1.fastq
-mv SRR8177059_2.fastq Psa_M228_2.fastq
-pigz Psa_M228_1.fastq
-pigz Psa_M228_2.fastq
-```
 
 ** 
 * Check that you can run containers
