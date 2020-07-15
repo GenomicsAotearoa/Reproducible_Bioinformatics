@@ -9,7 +9,8 @@
 
 - Dini to handle this?
 - Check `-B` arguments in case of weird paths to working directory.
-- Get these containers onto computers (don't rely on `shub`):
+- Get these containers onto computers (don't rely on `shub`).  
+  The containers should be in the root directory.
     + `porechop_0.2.4.sif`
     + `minimap2_2.17r941.sif`
     + `miniasm_0.3r179.sif`
@@ -21,11 +22,15 @@
 
 Trim adaptors and chimeric reads
 
+```bash
+mkdir run && cd run
+```
+
 <!-- shub://TomHarrop/ont-containers:porechop_0.2.4 -->
 
 ```bash
 singularity exec \
-    porechop_0.2.4.sif \
+    ../porechop_0.2.4.sif \
     porechop \
     --check_reads 100 \
     -t 8 \
@@ -38,7 +43,7 @@ Check what we are assembling
 
 ```bash
 singularity exec \
-    bbmap_38.76.sif \
+    ../bbmap_38.76.sif \
     stats.sh \
     in=trimmed.fastq
 ```
@@ -51,7 +56,7 @@ All-vs-all alignment with `minimap2`
 
 ```bash
 singularity exec \
-    minimap2_2.17r941.sif \
+    ../minimap2_2.17r941.sif \
     minimap2 \
     -x ava-ont \
     trimmed.fastq trimmed.fastq \
@@ -64,7 +69,7 @@ Unitig assembly with `miniasm`
 
 ```bash
 singularity exec \
-    miniasm_0.3r179.sif \
+    ../miniasm_0.3r179.sif \
     miniasm -f \
     trimmed.fastq \
     minimap.paf.gz > miniasm.gfa
@@ -84,7 +89,7 @@ Assembly QC
 
 ```bash
 singularity exec \
-    bbmap_38.76.sif \
+    ../bbmap_38.76.sif \
     stats.sh \
     in=miniasm.fasta
 ```
@@ -123,8 +128,6 @@ snakemake --cores 8         # doesn't run because missing porechop
 snakemake --cores 8 --use-singularity
 ```
 
-
-
 ### Further steps
 
 ![](../img/screenshot-funannotate.readthedocs.io-2020.06.25-16_11_20.png "Funannotate dependencies")
@@ -133,7 +136,7 @@ snakemake --cores 8 --use-singularity
 
 ```bash
 singularity exec \
-    funannotate-conda_1.7.4.sif \
+    ../funannotate-conda_1.7.4.sif \
     bash -c ' \
     funannotate mask \
     -i miniasm.fasta \
