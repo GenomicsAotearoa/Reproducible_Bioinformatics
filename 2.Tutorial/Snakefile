@@ -1,0 +1,67 @@
+#!/usr/bin/env python3
+
+
+# time on tom's computer:
+# real    0m15.211s
+# user    0m59.667s
+# sys     0m1.220s
+
+rule target:
+    input:
+        'output/miniasm.fa'
+
+
+rule miniasm:
+    input:
+        fq = 'output/trimmed.fastq',
+        paf = 'output/minimap.paf.gz'
+    output:
+        'output/miniasm.gfa'
+    singularity:
+        'miniasm_0.3r179.sif'
+    shell:
+        'miniasm -f '
+        '{input.fq} '
+        '{input.paf} '
+        '> {output}'
+
+rule minimap:
+    input:
+        'output/trimmed.fastq'
+    output:
+        'output/minimap.paf.gz'
+    singularity:
+        'minimap2_2.17r941.sif'
+    shell:
+        'minimap2 '
+        '-x ava-ont '
+        '{input} {input} '
+        '| gzip -1 > {output} '
+
+rule porechop:
+    input:
+        'data/all_guppy.fastq'
+    output:
+        'output/trimmed.fastq'
+    threads:
+        8
+    singularity:
+        'porechop_0.2.4.sif'
+    shell:
+        'porechop '
+        '--check_reads 100 '
+        '-t {threads} '
+        '--discard_middle '
+        '-i {input} '
+        '-o {output} '
+
+
+rule gfa_to_fa:
+    input:
+        'output/{file}.gfa'
+    output:
+        'output/{file}.fa'
+    shell:
+        'awk \'/^S/{{print ">"$2"\\n"$3}}\' '
+        '{input} '
+        '> {output}'
