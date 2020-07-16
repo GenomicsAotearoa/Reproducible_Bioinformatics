@@ -1,16 +1,16 @@
-## Live demo
+## Tutorial: genome assembly of 
 
 ### Overview
 
-- Use containers to trim and assemble some Nanopore reads from a diatom
-- No software needed other than `singularity`
+- Use containers to trim and assemble some Nanopore reads from Chromosome 17 of the diatom *Thalassiosira pseudonana*
+- Data and steps are from [Tim Kahlke's](https://www.uts.edu.au/staff/tim.kahlke) great [Introduction to Long-Read Data Analysis](https://timkahlke.github.io/LongRead_tutorials/).
+- No software needed other than `singularity`!
 
 ### Setup
 
-- Dini to handle this?
 - Check `-B` arguments in case of weird paths to working directory.
 - Get these containers onto computers (don't rely on `shub`).  
-  The containers should be in the root directory.
+The containers should be in the root directory.
     + `porechop_0.2.4.sif`
     + `minimap2_2.17r941.sif`
     + `miniasm_0.3r179.sif`
@@ -66,6 +66,9 @@ singularity exec \
 Unitig assembly with `miniasm`
 
 <!-- shub://TomHarrop/singularity-containers:miniasm_0.3r179 -->
+
+## look up -f
+## show versions
 
 ```bash
 singularity exec \
