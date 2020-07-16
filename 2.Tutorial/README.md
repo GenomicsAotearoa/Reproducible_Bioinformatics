@@ -1,4 +1,4 @@
-## Tutorial: genome assembly of 
+## Tutorial: genome assembly of diatom Chr 17
 
 ### Overview
 
