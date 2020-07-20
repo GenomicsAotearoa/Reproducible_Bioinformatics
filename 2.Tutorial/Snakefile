@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
 
-
 # time on tom's computer:
-# real    0m15.211s
-# user    0m59.667s
-# sys     0m1.220s
+# real    0m15.589s
+# user    0m54.859s
+# sys     0m1.919s
 
 rule target:
     input:
         'output/miniasm.fa'
-
 
 rule miniasm:
     input:
@@ -55,13 +53,14 @@ rule porechop:
         '-i {input} '
         '-o {output} '
 
-
 rule gfa_to_fa:
     input:
         'output/{file}.gfa'
     output:
         'output/{file}.fa'
+    singularity:
+        '../gfatools_0.4r165.sif'
     shell:
-        'awk \'/^S/{{print ">"$2"\\n"$3}}\' '
+        'gfatools gfa2fa '
         '{input} '
         '> {output}'

@@ -45,6 +45,8 @@ singularity exec \
 
 We'll have a look at the raw reads to see what the length distribution is like.
 
+<!-- shub://TomHarrop/seq-utils:bbmap_38.76 -->
+
 ```bash
 singularity exec \
     ../bbmap_38.76.sif \
@@ -73,17 +75,15 @@ singularity exec \
 
 Miniasm takes the aligned reads and merges the overlaps to produce "unitigs".
 
-<!-- shub://TomHarrop/singularity-containers:miniasm_0.3r179 -->
-
-## look up -f
-## show versions
+<!-- shub://TomHarrop/assemblers:miniasm_0.3r179 -->
 
 ```bash
 singularity exec \
     ../miniasm_0.3r179.sif \
-    miniasm -f \
-    trimmed.fastq \
-    minimap.paf.gz > miniasm.gfa
+    miniasm \
+    -f trimmed.fastq \
+    minimap.paf.gz \
+    > miniasm.gfa
 ```
 
 The output is in `.gfa` (graph) format. 
@@ -112,7 +112,7 @@ singularity exec \
 
 ### Step 3.
 
-A quick look at the assembly stats shows that we assembled ~ 1 MB of sequence in 36 contigs.
+A quick look at the assembly stats shows that we assembled ~ 1 MB of sequence in 11 contigs.
 
 <!-- shub://TomHarrop/seq-utils:bbmap_38.76 -->
 
@@ -120,7 +120,7 @@ A quick look at the assembly stats shows that we assembled ~ 1 MB of sequence in
 singularity exec \
     ../bbmap_38.76.sif \
     stats.sh \
-    in=miniasm.fasta
+    in=miniasm.fa
 ```
 
 ### Further steps
@@ -173,24 +173,9 @@ ls -lhrt
 
 snakemake --cores 8         # doesn't run because missing porechop
 snakemake --cores 8 --use-singularity
-```
 
-
-
-### Further steps
-
-![](../img/screenshot-funannotate.readthedocs.io-2020.06.25-16_11_20.png "Funannotate dependencies")
-
-<!-- shub://TomHarrop/funannotate-singularity:funannotate-conda_1.7.4 -->
-
-```bash
 singularity exec \
-    ../funannotate-conda_1.7.4.sif \
-    bash -c ' \
-    funannotate mask \
-    -i miniasm.fasta \
-    -o masked.fasta \
-    --cpus 8 '
+    ../bbmap_38.76.sif \
+    stats.sh \
+    in=miniasm.fa
 ```
-
-
