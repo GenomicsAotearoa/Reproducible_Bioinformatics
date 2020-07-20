@@ -14,17 +14,21 @@ The containers should be in the root directory.
     + `porechop_0.2.4.sif`
     + `minimap2_2.17r941.sif`
     + `miniasm_0.3r179.sif`
+    + `gfatools_0.4r165`
     + `bbmap_38.76.sif`
     + `funannotate-conda_1.7.4.sif`
 - Download data (`data/all_guppy.fastq`), it's stored on GH using Git LFS
-
-### Step 1.
-
-Trim adaptors and chimeric reads
+- Set up a working directory
 
 ```bash
 mkdir run && cd run
 ```
+
+### Step 1.
+
+The first step is to trim sequencing adaptors off the reads.
+We'll also search for chimeric reads, with adaptors in the middle of the read.
+We're using the [`Porechop`](https://github.com/rrwick/Porechop) package, which is deprecated, but we have a Singularity container that will continue to work no matter what OS we're on.
 
 <!-- shub://TomHarrop/ont-containers:porechop_0.2.4 -->
 
@@ -39,7 +43,7 @@ singularity exec \
     -o trimmed.fastq
 ```
 
-Check what we are assembling
+We'll have a look at the raw reads to see what the length distribution is like.
 
 ```bash
 singularity exec \
@@ -50,7 +54,11 @@ singularity exec \
 
 ### Step 2.
 
-All-vs-all alignment with `minimap2`
+To save time, we're not doing a full assembly of these reads.
+We're using the overlap-layout-consensus steps implemented in `miniasm`.
+It's not very accurate but it runs quickly.
+
+The first step is an all-vs-all alignment with `minimap2` to work out which reads overlap.
 
 <!-- shub://TomHarrop/singularity-containers:minimap2_2.17r941 -->
 
@@ -60,10 +68,10 @@ singularity exec \
     minimap2 \
     -x ava-ont \
     trimmed.fastq trimmed.fastq \
-    | pigz -1 > minimap.paf.gz
+    | gzip -1 > minimap.paf.gz
 ```
 
-Unitig assembly with `miniasm`
+Miniasm takes the aligned reads and merges the overlaps to produce "unitigs".
 
 <!-- shub://TomHarrop/singularity-containers:miniasm_0.3r179 -->
 
@@ -78,15 +86,33 @@ singularity exec \
     minimap.paf.gz > miniasm.gfa
 ```
 
-Extract fasta
+The output is in `.gfa` (graph) format. 
+We can examine it with `gfatools`.
+
+<!-- shub://TomHarrop/assembly-utils:gfatools_0.4r165 -->
 
 ```bash
-awk '/^S/{print ">"$2"\n"$3}' miniasm.gfa > miniasm.fasta
+singularity exec \
+    ../gfatools_0.4r165.sif \
+    gfatools stat \
+    miniasm.gfa
+```
+
+We can also use `gfatools` to convert the `.gfa` to `.fasta` format.
+
+<!-- shub://TomHarrop/assembly-utils:gfatools_0.4r165 -->
+
+```bash
+singularity exec \
+    ../gfatools_0.4r165.sif \
+    gfatools gfa2fa \
+    miniasm.gfa \
+    > miniasm.fa
 ```
 
 ### Step 3.
 
-Assembly QC
+A quick look at the assembly stats shows that we assembled ~ 1 MB of sequence in 36 contigs.
 
 <!-- shub://TomHarrop/seq-utils:bbmap_38.76 -->
 
@@ -97,9 +123,27 @@ singularity exec \
     in=miniasm.fasta
 ```
 
+### Further steps
+
+In this toy example we used software that's easy to install.
+Not all software is this easy to work with.
+Funannotate is a gene annotation workflow with ~74 **documented** dependencies.
+
+<!-- shub://TomHarrop/funannotate-singularity:funannotate-conda_1.7.4 -->
+
+```bash
+singularity exec \
+    ../funannotate-conda_1.7.4.sif \
+    bash -c ' \
+    funannotate check \
+    --show-versions'
+```
+
+![](../img/screenshot-funannotate.readthedocs.io-2020.06.25-16_11_20.png "Funannotate dependencies")
+
 ### Using containers with workflow managers
 
-Example rule to run miniasm inside a singularity container
+Example rule to run miniasm inside a singularity container:
 
 ```python3
 rule miniasm:
@@ -120,7 +164,7 @@ rule miniasm:
         '> {output}'
 ```
 
-Run the same workflow with containers
+Run the same workflow with containers (here's a `snakemake` [`Snakefile`](Snakefile) to test):
 
 ```bash
 cd ../2.Tutorial/
@@ -130,6 +174,8 @@ ls -lhrt
 snakemake --cores 8         # doesn't run because missing porechop
 snakemake --cores 8 --use-singularity
 ```
+
+
 
 ### Further steps
 
