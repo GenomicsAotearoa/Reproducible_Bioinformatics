@@ -14,12 +14,7 @@
     + `miniasm_0.3r179.sif`
     + `gfatools_0.4r165`
     + `bbmap_38.76.sif`
-- Download data (`data/all_guppy.fastq`), it's stored on GH using Git LFS
-- Set up a working directory
-
-```bash
-mkdir run && cd run
-```
+- Download the raw data (it's part of this Git repo at `data/all_guppy.fastq`)
 
 Let's make sure the raw data is what we think it is:
 
@@ -27,6 +22,13 @@ Let's make sure the raw data is what we think it is:
 md5sum data/all_guppy.fastq
 # 457b8aecf94bb285e5bb672c8d7e182f  data/all_guppy.fastq
 ```
+
+- Set up a working directory
+
+```bash
+mkdir run && cd run
+```
+
 
 ### Step 1.
 
