@@ -21,7 +21,7 @@ Download the raw data for the tutorial [from this github repo](https://github.co
 
 ```bash
 wget \
-    https://github.com/GenomicsAotearoa/Reproducible_Bioinformatics/raw/master/data/all_guppy.fastq`
+    https://github.com/GenomicsAotearoa/Reproducible_Bioinformatics/raw/master/data/all_guppy.fastq
 ```
 
 Make sure the download worked:
