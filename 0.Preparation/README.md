@@ -13,7 +13,13 @@ Instructions for using singularity on
 
 ## Download required containers
 
-Containers are available on NeSI at: ...path...
+The containers are available on NeSI (Mahuika) at `/opt/nesi/containers/training`:
+
+- `porechop_0.2.4.sif`
+- `minimap2_2.17r941.sif`
+- `miniasm_0.3r179.sif`
+- `gfatools_0.4r165`
+- `bbmap_38.76.sif`
 
 ## Download tutorial data
 
