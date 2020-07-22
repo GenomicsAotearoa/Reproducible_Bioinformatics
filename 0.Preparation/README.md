@@ -4,10 +4,12 @@ You'll need the following if you want to follow along with the tutorial:
 
 ## Install Singularity
 
-[On NeSI](https://support.nesi.org.nz/hc/en-gb/articles/360001107916-Singularity)
-[Windows](https://sylabs.io/guides/3.0/user-guide/installation.html#install-on-windows-or-mac)
-[Mac](https://sylabs.io/guides/3.0/user-guide/installation.html#install-on-windows-or-mac)
-[Linux](https://sylabs.io/guides/3.0/user-guide/installation.html#install-on-linux)
+Instructions for using singularity on
+
+- [NeSI](https://support.nesi.org.nz/hc/en-gb/articles/360001107916-Singularity)
+- [Windows](https://sylabs.io/guides/3.0/user-guide/installation.html#install-on-windows-or-mac)
+- [Mac](https://sylabs.io/guides/3.0/user-guide/installation.html#install-on-windows-or-mac)
+- [Linux](https://sylabs.io/guides/3.0/user-guide/installation.html#install-on-linux)
 
 ## Download required containers
 
