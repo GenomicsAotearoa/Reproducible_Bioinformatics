@@ -8,9 +8,7 @@
 
 ### Setup
 
-- Check `-B` arguments in case of weird paths to working directory.
-- Get these containers onto computers (don't rely on `shub`).  
-The containers should be in the root directory.
+- These containers should be in the root directory.
     + `porechop_0.2.4.sif`
     + `minimap2_2.17r941.sif`
     + `miniasm_0.3r179.sif`
