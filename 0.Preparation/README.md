@@ -1,25 +1,24 @@
-# Things to do before the Workshop
+# Preparation
 
-## Install Singularity or make sure you can access it
+You'll need the following if you want to follow along with the tutorial:
+
+## Install Singularity
+
 [On NeSI](https://support.nesi.org.nz/hc/en-gb/articles/360001107916-Singularity)
 [Windows](https://sylabs.io/guides/3.0/user-guide/installation.html#install-on-windows-or-mac)
 [Mac](https://sylabs.io/guides/3.0/user-guide/installation.html#install-on-windows-or-mac)
 [Linux](https://sylabs.io/guides/3.0/user-guide/installation.html#install-on-linux)
 
-## Download Containers
+## Download required containers
+
 Containers are available on NeSI at: ...path...
-If working remote, you can download them from [Google Drive](https://drive.google.com/drive/folders/1QpyTKDd4FIBoRaNKieCCbySyNVGvzGkv?usp=sharing)
 
-## Download Data
-(part of the repo using git LFS)
+## Download tutorial data
 
-`wget https://github.com/blah/all_guppy.fastq`
+Download the raw data for the tutorial [from this github repo](https://github.com/GenomicsAotearoa/Reproducible_Bioinformatics/raw/master/data/all_guppy.fastq), or from your terminal:
 
+`wget https://github.com/GenomicsAotearoa/Reproducible_Bioinformatics/raw/master/data/all_guppy.fastq`
 
-** 
-* Check that you can run containers
+## Refresher
 
-* Check md5sum of downloaded data
-
-# Refresher
-Have a refresher in [BASH](https://linuxconfig.org/bash-scripting-tutorial-for-beginners)
+[bash refresher](https://linuxconfig.org/bash-scripting-tutorial-for-beginners)
