@@ -14,8 +14,7 @@
     + `miniasm_0.3r179.sif`
     + `gfatools_0.4r165`
     + `bbmap_38.76.sif`
-- Download the raw data (it's part of this Git repo at `data/all_guppy.fastq`)
-
+- Download the raw data (it's part of this Git repo at `data/all_guppy.fastq`)  
 Let's make sure the raw data is what we think it is:
 
 ```bash
