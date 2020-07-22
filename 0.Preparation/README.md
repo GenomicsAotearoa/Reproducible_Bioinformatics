@@ -17,7 +17,17 @@ Containers are available on NeSI at: ...path...
 
 Download the raw data for the tutorial [from this github repo](https://github.com/GenomicsAotearoa/Reproducible_Bioinformatics/raw/master/data/all_guppy.fastq), or from your terminal:
 
-`wget https://github.com/GenomicsAotearoa/Reproducible_Bioinformatics/raw/master/data/all_guppy.fastq`
+```bash
+wget \
+    https://github.com/GenomicsAotearoa/Reproducible_Bioinformatics/raw/master/data/all_guppy.fastq`
+```
+
+Make sure the download worked:
+
+```bash
+md5sum all_guppy.fastq 
+# 457b8aecf94bb285e5bb672c8d7e182f  all_guppy.fastq
+```
 
 ## Refresher
 
