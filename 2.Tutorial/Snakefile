@@ -18,8 +18,8 @@ rule miniasm:
     singularity:
         '../miniasm_0.3r179.sif'
     shell:
-        'miniasm -f '
-        '{input.fq} '
+        'miniasm '
+        '-f {input.fq} '
         '{input.paf} '
         '> {output}'
 
@@ -28,11 +28,14 @@ rule minimap:
         'output/trimmed.fastq'
     output:
         'output/minimap.paf.gz'
+    threads:
+        8
     singularity:
         '../minimap2_2.17r941.sif'
     shell:
         'minimap2 '
         '-x ava-ont '
+        '-t {threads} '
         '{input} {input} '
         '| gzip -1 > {output} '
 
@@ -52,6 +55,14 @@ rule porechop:
         '--discard_middle '
         '-i {input} '
         '-o {output} '
+
+rule link_input:
+    input:
+        '../data/all_guppy.fastq'
+    output:
+        temp('all_guppy.fastq')
+    shell:
+        'cp {input} {output}'
 
 rule gfa_to_fa:
     input:

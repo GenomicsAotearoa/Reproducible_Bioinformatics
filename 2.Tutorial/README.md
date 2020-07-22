@@ -174,7 +174,6 @@ Run the same workflow with containers (here's a `snakemake` [`Snakefile`](Snakef
 
 ```bash
 cd ../2.Tutorial/
-cp ../data/all_guppy.fastq .
 ls -lhrt
 
 snakemake --cores 8         # doesn't run because missing porechop
@@ -183,5 +182,13 @@ snakemake --cores 8 --use-singularity
 singularity exec \
     ../bbmap_38.76.sif \
     stats.sh \
-    in=miniasm.fa
+    in=output/miniasm.fa
+```
+
+Check if we get the same output:
+
+```bash
+md5sum \
+    ../run/miniasm.fa \
+    output/miniasm.fa
 ```
