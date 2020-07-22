@@ -41,11 +41,11 @@ We're using the [`Porechop`](https://github.com/rrwick/Porechop) package, which 
 singularity exec \
     ../porechop_0.2.4.sif \
     porechop \
-    --check_reads 100 \
-    -t 8 \
-    --discard_middle \
     -i ../data/all_guppy.fastq \
-    -o trimmed.fastq
+    -o trimmed.fastq \
+    --threads 8 \
+    --discard_middle \
+    --check_reads 100
 ```
 
 We'll have a look at the raw reads to see what the length distribution is like.
@@ -73,6 +73,7 @@ The first step is an all-vs-all alignment with `minimap2` to work out which read
 singularity exec \
     ../minimap2_2.17r941.sif \
     minimap2 \
+    -t 8 \
     -x ava-ont \
     trimmed.fastq trimmed.fastq \
     | gzip -1 > minimap.paf.gz
