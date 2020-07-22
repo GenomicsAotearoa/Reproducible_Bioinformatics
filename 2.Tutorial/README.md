@@ -4,7 +4,7 @@
 
 - Use containers to trim and assemble some Nanopore reads from Chromosome 17 of the diatom *Thalassiosira pseudonana*
 - Data and steps are from [Tim Kahlke's](https://www.uts.edu.au/staff/tim.kahlke) great [Introduction to Long-Read Data Analysis](https://timkahlke.github.io/LongRead_tutorials/).
-- No software needed other than `singularity`!
+- No software needed other than `singularity`
 
 ### Setup
 
@@ -14,12 +14,18 @@
     + `miniasm_0.3r179.sif`
     + `gfatools_0.4r165`
     + `bbmap_38.76.sif`
-    + `funannotate-conda_1.7.4.sif`
 - Download data (`data/all_guppy.fastq`), it's stored on GH using Git LFS
 - Set up a working directory
 
 ```bash
 mkdir run && cd run
+```
+
+Let's make sure the raw data is what we think it is:
+
+```bash
+md5sum data/all_guppy.fastq
+# 457b8aecf94bb285e5bb672c8d7e182f  data/all_guppy.fastq
 ```
 
 ### Step 1.
